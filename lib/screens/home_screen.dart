@@ -1,4 +1,4 @@
-//import 'package:bmicalculator/screens/result_screen.dart';
+import 'package:bmicalculator/logic/calculator_logic.dart';
 import 'package:bmicalculator/screens/result_screen.dart';
 import 'package:bmicalculator/widgets/age_weight_style.dart';
 import 'package:bmicalculator/widgets/iconCard.dart';
@@ -7,14 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:bmicalculator/utils/screen_size.dart';
 
-
 const activeCardColor = Color(0xff1d1e33);
 const deActiveCardColor = Color(0xff111328);
 const bottomContainerColor = Colors.pink;
 
 class HomeScreen extends StatefulWidget {
-
-  static String id = "HomeScreen";
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -24,7 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
   double currentSliderValue = 180;
   int weight = 60;
   int age = 40;
-
+  CalculatorLogic calculatorLogic = CalculatorLogic();
 
   @override
   Widget build(BuildContext context) {
@@ -91,20 +88,27 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: <Widget>[
                     Text(
                       'Height',
-                      style: TextStyle(fontSize: SizeConfig.safeBlockHorizontal*4.5,
+                      style: TextStyle(
+                          fontSize: SizeConfig.safeBlockHorizontal * 4.5,
                           color: Color(0xff8d8e98)),
                     ),
-                    SizedBox(height: SizeConfig.safeBlockVertical*.5,),
-                    Text("${currentSliderValue.toInt()}"+" cm",style: TextStyle(
-                      fontSize: SizeConfig.safeBlockHorizontal*10,
-                      fontWeight: FontWeight.bold
-                    ),),
+                    SizedBox(
+                      height: SizeConfig.safeBlockVertical * .5,
+                    ),
+                    Text(
+                      "${currentSliderValue.toInt()}" + " cm",
+                      style: TextStyle(
+                          fontSize: SizeConfig.safeBlockHorizontal * 10,
+                          fontWeight: FontWeight.bold),
+                    ),
                     Slider(
-                      max: 220,min: 100,divisions: 120,
+                      max: 220,
+                      min: 100,
+                      divisions: 120,
                       activeColor: Colors.pink,
                       inactiveColor: Color(0xff0a0e21),
                       value: currentSliderValue,
-                      onChanged: (double newValue){
+                      onChanged: (double newValue) {
                         setState(() {
                           currentSliderValue = newValue;
                         });
@@ -124,16 +128,17 @@ class _HomeScreenState extends State<HomeScreen> {
                       cardChild: WeightAndAgeStyle(
                         textHeading: "Weight",
                         ageOrWeight: weight,
-                      onPressedAdd: (){
+                        onPressedAdd: () {
                           setState(() {
                             weight++;
                           });
-                      },
-                      onPressedMinus: (){
+                        },
+                        onPressedMinus: () {
                           setState(() {
                             weight--;
                           });
-                      },),
+                        },
+                      ),
                     ),
                   ),
                   Expanded(
@@ -141,16 +146,17 @@ class _HomeScreenState extends State<HomeScreen> {
                       cardChild: WeightAndAgeStyle(
                         textHeading: "Age",
                         ageOrWeight: age,
-                      onPressedAdd: (){
+                        onPressedAdd: () {
                           setState(() {
                             age++;
                           });
-                      },
-                      onPressedMinus: (){
+                        },
+                        onPressedMinus: () {
                           setState(() {
                             age--;
                           });
-                      },),
+                        },
+                      ),
                       colour: activeCardColor,
                     ),
                   ),
@@ -160,20 +166,34 @@ class _HomeScreenState extends State<HomeScreen> {
             Expanded(
               flex: 1,
               child: GestureDetector(
-                onTap: (){
-                  Navigator.pushNamed(context, ResultScreen.id);
+                onTap: () {
+                  CalculatorLogic calc = CalculatorLogic(
+                      height: currentSliderValue.toInt(), weight: weight);
+
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ResultScreen(
+                        bmiResult: calc.getResult(),
+                        bmiResultText: calc.getResultText(),
+                        bmiResultInfo: calc.getResultInfoInfo(),
+                      ),
+                    ),
+                  );
                 },
                 child: Container(
                   margin: EdgeInsets.only(top: 10),
                   decoration: BoxDecoration(
                     color: bottomContainerColor,
                   ),
-                  height: height /20,
+                  height: height / 20,
                   width: width,
                   child: Center(
-                    child: Text("Calculate",style: TextStyle(
-                        fontSize: SizeConfig.safeBlockHorizontal*9
-                    ),),
+                    child: Text(
+                      "Calculate",
+                      style: TextStyle(
+                          fontSize: SizeConfig.safeBlockHorizontal * 9),
+                    ),
                   ),
                 ),
               ),
@@ -184,10 +204,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-
-
-
-
-
-
-

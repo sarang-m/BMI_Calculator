@@ -17,11 +17,7 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: Color(0xff0a0e21),
       ),
       title: 'Bmi Calculator',
-      initialRoute: HomeScreen.id,
-      routes: {
-        HomeScreen.id:(context) => HomeScreen(),
-        ResultScreen.id:(context) => ResultScreen()
-      },
+      home: HomeScreen(),
     );
   }
 }
